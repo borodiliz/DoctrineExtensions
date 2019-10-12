@@ -2,10 +2,9 @@
 
 namespace Gedmo\Translatable\Mapping\Event\Adapter;
 
+use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use Gedmo\Mapping\Event\Adapter\ODM as BaseAdapterODM;
 use Gedmo\Tool\Wrapper\AbstractWrapper;
-use Doctrine\ODM\MongoDB\Mapping\ClassMetadataInfo;
-use Doctrine\ODM\MongoDB\Cursor;
 use Gedmo\Translatable\Mapping\Event\TranslatableAdapter;
 
 /**
@@ -51,7 +50,7 @@ final class ODM extends BaseAdapterODM implements TranslatableAdapter
             // first try to load it using collection
             foreach ($wrapped->getMetadata()->fieldMappings as $mapping) {
                 $isRightCollection = isset($mapping['association'])
-                    && $mapping['association'] === ClassMetadataInfo::REFERENCE_MANY
+                    && $mapping['association'] === ClassMetadata::REFERENCE_MANY
                     && $mapping['targetDocument'] === $translationClass
                     && $mapping['mappedBy'] === 'object'
                 ;
@@ -88,9 +87,7 @@ final class ODM extends BaseAdapterODM implements TranslatableAdapter
         }
         $q->setHydrate(false);
         $result = $q->execute();
-        if ($result instanceof Cursor) {
-            $result = $result->toArray();
-        }
+        $result = $result->toArray();
 
         return $result;
     }
@@ -115,9 +112,7 @@ final class ODM extends BaseAdapterODM implements TranslatableAdapter
         }
         $q = $qb->getQuery();
         $result = $q->execute();
-        if ($result instanceof Cursor) {
-            $result = current($result->toArray());
-        }
+        $result = current($result->toArray());
 
         return $result;
     }

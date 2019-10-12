@@ -3,8 +3,7 @@
 namespace Gedmo\Translatable\Document\Repository;
 
 use Gedmo\Translatable\TranslatableListener;
-use Doctrine\ODM\MongoDB\DocumentRepository;
-use Doctrine\ODM\MongoDB\Cursor;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\UnitOfWork;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
@@ -137,9 +136,7 @@ class TranslationRepository extends DocumentRepository
 
             $q->setHydrate(false);
             $data = $q->execute();
-            if ($data instanceof Cursor) {
-                $data = $data->toArray();
-            }
+            $data = $data->toArray();
             if ($data && is_array($data) && count($data)) {
                 foreach ($data as $row) {
                     $result[$row['locale']][$row['field']] = $row['content'];
@@ -175,9 +172,7 @@ class TranslationRepository extends DocumentRepository
 
             $q->setHydrate(false);
             $result = $q->execute();
-            if ($result instanceof Cursor) {
-                $result = $result->toArray();
-            }
+            $result = $result->toArray();
             $id = count($result) ? $result[0]['foreignKey'] : null;
             if ($id) {
                 $document = $this->dm->find($class, $id);
@@ -207,10 +202,8 @@ class TranslationRepository extends DocumentRepository
 
             $q->setHydrate(false);
             $data = $q->execute();
+            $data = $data->toArray();
 
-            if ($data instanceof Cursor) {
-                $data = $data->toArray();
-            }
             if ($data && is_array($data) && count($data)) {
                 foreach ($data as $row) {
                     $result[$row['locale']][$row['field']] = $row['content'];

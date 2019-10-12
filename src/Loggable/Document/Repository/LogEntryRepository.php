@@ -2,11 +2,10 @@
 
 namespace Gedmo\Loggable\Document\Repository;
 
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 use Gedmo\Loggable\Document\LogEntry;
 use Gedmo\Tool\Wrapper\MongoDocumentWrapper;
 use Gedmo\Loggable\LoggableListener;
-use Doctrine\ODM\MongoDB\DocumentRepository;
-use Doctrine\ODM\MongoDB\Cursor;
 
 /**
  * The LogEntryRepository has some useful functions
@@ -44,9 +43,8 @@ class LogEntryRepository extends DocumentRepository
         $q = $qb->getQuery();
 
         $result = $q->execute();
-        if ($result instanceof Cursor) {
-            $result = $result->toArray();
-        }
+        $result = $result->toArray();
+
         return $result;
     }
 
@@ -77,9 +75,8 @@ class LogEntryRepository extends DocumentRepository
         $q = $qb->getQuery();
 
         $logs = $q->execute();
-        if ($logs instanceof Cursor) {
-            $logs = $logs->toArray();
-        }
+        $logs = $logs->toArray();
+
         if ($logs) {
             $data = array();
             while (($log = array_shift($logs))) {
